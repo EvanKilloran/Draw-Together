@@ -1,0 +1,29 @@
+<html>
+  <head>
+    <title>A Multiplayer Game</title>
+    <style>
+      canvas {
+        width: 1900px;
+        height: 800px;
+        border: 5px solid black;
+      }
+	  .inline{
+		float: left;
+		padding: 5px;
+		font-size: 28px;
+		padding-top: 0px;
+		margin-top: -40px;
+	  }
+    </style>
+    <script src="/socket.io/socket.io.js"></script>
+  </head>
+  <body>
+    <canvas id="canvas"></canvas>
+	<button onclick="boardReset()" style="width:120px;height:60px;">Reset Board</button>
+	</br>
+	<h1> Players </h1>
+	<div id="players">
+	</div>
+  </body>
+  <script src="/static/game.js"></script>
+</html>
