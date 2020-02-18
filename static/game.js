@@ -8,7 +8,8 @@ var draw = {
   y: 0,
   prevx: 0,
   prevy: 0,
-  drawprev: false
+  drawprev: false,
+  size: 10
 }
 var download = false;
 var i;
@@ -31,12 +32,12 @@ setInterval(function() {
 		socket.emit('drawing', draw, color);
 		context.beginPath();
 		context.fillStyle = color;
-		context.arc(draw.x-12, draw.y-10, 10, 0, 2 * Math.PI);
+		context.arc(draw.x-12, draw.y-10, draw.size, 10, 0, 2 * Math.PI);
 		context.fill();
 		if (draw.drawprev == true){
 			context.beginPath();
-			context.lineWidth = 20;
 			context.strokeStyle = color;
+			context.lineWidth = draw.size*2;
 			context.moveTo(draw.x-12,draw.y-10);
 			context.lineTo(draw.prevx-12,draw.prevy-10);
 			context.stroke();
@@ -69,12 +70,12 @@ context.fillStyle = 'black';
 socket.on('drawnew', function(details,fillStyle) {
 	context.beginPath();
 	context.fillStyle = fillStyle
-	context.arc(details.x-12, details.y-10, 10, 0, 2 * Math.PI);
+	context.arc(details.x-12, details.y-10, details.size, 10, 0, 2 * Math.PI);
 	context.fill();
 	if (details.drawprev == true){
 		context.beginPath();
-		context.lineWidth = 20;
 		context.strokeStyle = fillStyle;
+		context.lineWidth = details.size*2;
 		context.moveTo(details.x-12,details.y-10);
 		context.lineTo(details.prevx-12,details.prevy-10);
 		context.stroke();
@@ -128,6 +129,10 @@ function addRow(named) {
 function removeRow(elementId) {
 	var element = document.getElementById(elementId);
     element.parentNode.removeChild(element);
+}
+
+function changeSize(size) {
+	draw.size = size;
 }
 
 function toggleDownload(){
