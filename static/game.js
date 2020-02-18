@@ -30,6 +30,7 @@ setInterval(function() {
 	if (draw.active == true){
 		socket.emit('drawing', draw, color);
 		context.beginPath();
+		context.fillStyle = color;
 		context.arc(draw.x-12, draw.y-10, 10, 0, 2 * Math.PI);
 		context.fill();
 		if (draw.drawprev == true){
