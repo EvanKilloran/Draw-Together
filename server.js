@@ -36,7 +36,7 @@ io.on('connection', function(socket) {
 	}
   });
   socket.on('drawing', function(data,fillStyle) {
-	io.sockets.emit('drawnew',data,fillStyle);
+	socket.broadcast.emit('drawnew',data,fillStyle);
   });
   socket.on('disconnect', function() {
     // remove disconnected player
