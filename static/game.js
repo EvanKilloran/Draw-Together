@@ -86,7 +86,6 @@ socket.on('drawnew', function(details, fillStyle) {
 		context.fillStyle = fillStyle
 		context.arc(details[i][0]-12, details[i][1]-10, details[i][5], 10, 0, 2 * Math.PI);
 		context.fill();
-		console.log(details.length);
 		if (details[i][4] == 1){
 			context.beginPath();
 			context.strokeStyle = fillStyle;
