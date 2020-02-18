@@ -1,129 +1,31 @@
+<!DOCTYPE html>
 <html>
   <head>
-    <title>A Multiplayer Game</title>
-    <style>
-      canvas {
-        width: 1900px;
-        height: 800px;
-        border: 5px solid black;
-      }
-	  .inline{
-		float: left;
-		padding: 5px;
-		font-size: 28px;
-		padding-top: 0px;
-		margin-top: -40px;
-	  }
-		.colorpick {
-			  border: none;
-			  color: white;
-			  padding: 15px 32px;
-			  text-align: center;
-			  text-decoration: none;
-			  display: inline-block;
-			  font-size: 16px;
-		}
-	  #green{
-	  	 background-color: #4CAF50; /* Green */
-	  }
-	  #red{
-	  	 background-color: 	#FF0000; /* red */
-	  }
-	  #blue{
-	  	 background-color: #0000FF; /* blue */
-	  }
-	  #yellow{
-	  	 background-color: #ffff00; /* yellow */
-	  }
-	  #black{
-	  	 background-color: #000000; /* black */
-	  }
-	  #white{
-	  	 background-color: #FFC0CB; /* white */
-	  }
-	  /* The switch - the box around the slider */
-.switch {
-  position: relative;
-  display: inline-block;
-  width: 60px;
-  height: 34px;
-}
-
-/* Hide default HTML checkbox */
-.switch input {
-  opacity: 0;
-  width: 0;
-  height: 0;
-}
-
-/* The slider */
-.slider {
-  position: absolute;
-  cursor: pointer;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: #ccc;
-  -webkit-transition: .4s;
-  transition: .4s;
-}
-
-.slider:before {
-  position: absolute;
-  content: "";
-  height: 26px;
-  width: 26px;
-  left: 4px;
-  bottom: 4px;
-  background-color: white;
-  -webkit-transition: .4s;
-  transition: .4s;
-}
-
-input:checked + .slider {
-  background-color: #2196F3;
-}
-
-input:focus + .slider {
-  box-shadow: 0 0 1px #2196F3;
-}
-
-input:checked + .slider:before {
-  -webkit-transform: translateX(26px);
-  -ms-transform: translateX(26px);
-  transform: translateX(26px);
-}
-
-/* Rounded sliders */
-.slider.round {
-  border-radius: 34px;
-}
-
-.slider.round:before {
-  border-radius: 50%;
-}
-    </style>
-    <script src="/socket.io/socket.io.js"></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>Draw Together</title>
+    <link href="/static/style.css" rel="stylesheet" type="text/css"/>
+	<script src="/socket.io/socket.io.js"></script>
+	
   </head>
   <body>
     <canvas id="canvas"></canvas>
-	<button onclick="boardReset()" style="width:120px;height:60px;" id = "button">Reset Board</button>
+	<button onclick="boardReset()" style="width:120px;height:47px;" id = "button">Reset Board</button>
 	<button class="colorpick" id="green" onclick="changeColor('green')">green</button>
 	<button class="colorpick" id="red" onclick="changeColor('red')">red</button>
 	<button class="colorpick" id="blue" onclick="changeColor('blue')">blue</button>
 	<button class="colorpick" id="yellow" onclick="changeColor('yellow')">yellow</button>
 	<button class="colorpick" id="black" onclick="changeColor('black')">black</button>
 	<button class="colorpick" id="white" onclick="changeColor('white')">white(erase)</button>
-	<p > Download when cleared? </p>
-	<label class="switch">
+	<label class="switch" style="float:right;">
 	  <input type="checkbox" onclick="toggleDownload()">
 	  <span class="slider round"></span>
 	</label>
 		<a id="link"></a>
+			<p class="colorpick" style="color:black;float:right;"> Download when cleared: </p>
 	</br>
-	<h1> Players </h1>
-	<div id="players">
+	<h1 class="higher"> Players </h1>
+	<div class="higher" id="players">
 	</div>
   </body>
   <script src="/static/game.js"></script>
