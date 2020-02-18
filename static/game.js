@@ -7,10 +7,10 @@ var draw = {
   x: 0,
   y: 0,
   prevx: 0,
-  prevy: 0
+  prevy: 0,
+  drawprev: false
 }
 var download = false;
-var drawprev = false;
 var i;
 var angle;
 
@@ -32,18 +32,18 @@ setInterval(function() {
 		context.beginPath();
 		context.arc(draw.x-12, draw.y-10, 10, 0, 2 * Math.PI);
 		context.fill();
-		if (drawprev == true){
+		if (draw.drawprev == true){
 			context.beginPath();
 			context.lineWidth = 20;
 			context.moveTo(draw.x-12,draw.y-10);
 			context.lineTo(draw.prevx-12,draw.prevy-10);
 			context.stroke();
 		}
-		drawprev = true;
+		draw.drawprev = true;
 		draw.prevx = draw.x;
 		draw.prevy = draw.y;
 	} else{
-		drawprev= false;
+		draw.drawprev= false;
 	}
 }, 0);
 
@@ -69,6 +69,13 @@ socket.on('drawnew', function(details,fillStyle) {
 	context.beginPath();
 	context.arc(details.x-12, details.y-10, 10, 0, 2 * Math.PI);
 	context.fill();
+	if (details.drawprev == true){
+		context.beginPath();
+		context.lineWidth = 20;
+		context.moveTo(details.x-12,details.y-10);
+		context.lineTo(details.prevx-12,details.prevy-10);
+		context.stroke();
+	}
 });
 socket.on('clearrect', function() {
 	if (download == true){
