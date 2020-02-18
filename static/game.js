@@ -14,6 +14,8 @@ var draw = {
 var download = false;
 var i;
 var angle;
+var drawList = [];
+var timer = 0;
 
 document.addEventListener('mousedown', function(event) {
 	draw.active = true;
@@ -28,9 +30,8 @@ document.addEventListener('mouseup', function(event) {
 socket.emit('new player');
 
 setInterval(function() {
-	if (draw.active == true){
+	if (draw.x > 0 && draw.x < (1850+30) && draw.y>0 && draw.y < (780+30) && draw.active == true){
 		if (draw.x != draw.prevx && draw.y != draw.prevy){
-			socket.emit('drawing', draw, color);
 			context.beginPath();
 			context.fillStyle = color;
 			context.arc(draw.x-12, draw.y-10, draw.size, 10, 0, 2 * Math.PI);
@@ -43,6 +44,7 @@ setInterval(function() {
 				context.lineTo(draw.prevx-12,draw.prevy-10);
 				context.stroke();
 			}
+			drawList.push([draw.x,draw.y,draw.prevx,draw.prevy,draw.drawprev ? 1:0,draw.size]);
 			draw.drawprev = true;
 			draw.prevx = draw.x;
 			draw.prevy = draw.y;
@@ -50,12 +52,25 @@ setInterval(function() {
 	} else{
 		draw.drawprev= false;
 	}
+	if (timer == 4){
+		timer = 0;
+		if (drawList.length != 0){
+			socket.emit('drawing', drawList, color);
+			drawList = []
+		}
+	}
+	if (drawList[0] == drawList[1] && drawList.length > 0){
+		console.log('wtf');
+	}
+	timer += 1;
 }, 0);
+
+
 
 onmousemove = function(e){
 	if (e != undefined){
-		draw.x = e.clientX,
-		draw.y = e.clientY
+		draw.x = e.pageX,
+		draw.y = e.pageY
 	}
 }
 
@@ -70,17 +85,20 @@ context.fillRect(0, 0, 1850, 780);
 context.fillStyle = 'black';
 
 socket.on('drawnew', function(details,fillStyle) {
-	context.beginPath();
-	context.fillStyle = fillStyle
-	context.arc(details.x-12, details.y-10, details.size, 10, 0, 2 * Math.PI);
-	context.fill();
-	if (details.drawprev == true){
+	for (i=0; i<details.length; i++){
+		console.log(details[4]);
 		context.beginPath();
-		context.strokeStyle = fillStyle;
-		context.lineWidth = details.size*2;
-		context.moveTo(details.x-12,details.y-10);
-		context.lineTo(details.prevx-12,details.prevy-10);
-		context.stroke();
+		context.fillStyle = fillStyle
+		context.arc(details[i][0]-12, details[i][1]-10, details[i][5], 10, 0, 2 * Math.PI);
+		context.fill();
+		if (details[i][4] == 1){
+			context.beginPath();
+			context.strokeStyle = fillStyle;
+			context.lineWidth = details[i][5]*2;
+			context.moveTo(details[i][0]-12,details[i][1]-10);
+			context.lineTo(details[i][2]-12,details[i][3]-10);
+			context.stroke();
+		}
 	}
 });
 socket.on('clearrect', function() {
