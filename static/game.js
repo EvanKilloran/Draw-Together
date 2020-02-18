@@ -29,22 +29,24 @@ socket.emit('new player');
 
 setInterval(function() {
 	if (draw.active == true){
-		socket.emit('drawing', draw, color);
-		context.beginPath();
-		context.fillStyle = color;
-		context.arc(draw.x-12, draw.y-10, draw.size, 10, 0, 2 * Math.PI);
-		context.fill();
-		if (draw.drawprev == true){
+		if (draw.x != draw.prevx && draw.y != draw.prevy){
+			socket.emit('drawing', draw, color);
 			context.beginPath();
-			context.strokeStyle = color;
-			context.lineWidth = draw.size*2;
-			context.moveTo(draw.x-12,draw.y-10);
-			context.lineTo(draw.prevx-12,draw.prevy-10);
-			context.stroke();
+			context.fillStyle = color;
+			context.arc(draw.x-12, draw.y-10, draw.size, 10, 0, 2 * Math.PI);
+			context.fill();
+			if (draw.drawprev == true){
+				context.beginPath();
+				context.strokeStyle = color;
+				context.lineWidth = draw.size*2;
+				context.moveTo(draw.x-12,draw.y-10);
+				context.lineTo(draw.prevx-12,draw.prevy-10);
+				context.stroke();
+			}
+			draw.drawprev = true;
+			draw.prevx = draw.x;
+			draw.prevy = draw.y;
 		}
-		draw.drawprev = true;
-		draw.prevx = draw.x;
-		draw.prevy = draw.y;
 	} else{
 		draw.drawprev= false;
 	}
