@@ -1,7 +1,11 @@
 canvas {
 	width: 1850px;
-	height: 800px;
+	height: 780px;
 	border: 5px solid black;
+}
+
+#buttonsdiv{
+	margin-top:-18px;
 }
 
 .inline{
