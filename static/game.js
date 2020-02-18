@@ -35,6 +35,7 @@ setInterval(function() {
 		if (draw.drawprev == true){
 			context.beginPath();
 			context.lineWidth = 20;
+			context.strokeStyle = color;
 			context.moveTo(draw.x-12,draw.y-10);
 			context.lineTo(draw.prevx-12,draw.prevy-10);
 			context.stroke();
@@ -65,13 +66,14 @@ context.fillRect(0, 0, 1850, 780);
 context.fillStyle = 'black';
 
 socket.on('drawnew', function(details,fillStyle) {
-	context.fillStyle = fillStyle
 	context.beginPath();
+	context.fillStyle = fillStyle
 	context.arc(details.x-12, details.y-10, 10, 0, 2 * Math.PI);
 	context.fill();
 	if (details.drawprev == true){
 		context.beginPath();
 		context.lineWidth = 20;
+		context.strokeStyle = fillStyle;
 		context.moveTo(details.x-12,details.y-10);
 		context.lineTo(details.prevx-12,details.prevy-10);
 		context.stroke();
