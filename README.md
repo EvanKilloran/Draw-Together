@@ -1,5 +1,5 @@
 # Draw-Together
-Draw together with friends using Node.js and internet connectivity
+Draw together with friends in real time using Node.js and internet connectivity
 
 # Created with
 Node.js
