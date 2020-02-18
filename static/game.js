@@ -31,7 +31,7 @@ socket.emit('new player');
 
 setInterval(function() {
 	if (draw.x > 0 && draw.x < (1850+30) && draw.y>0 && draw.y < (780+30) && draw.active == true){
-		if (draw.x != draw.prevx && draw.y != draw.prevy){
+		if (draw.x != draw.prevx || draw.y != draw.prevy){
 			context.beginPath();
 			context.fillStyle = color;
 			context.arc(draw.x-12, draw.y-10, draw.size, 10, 0, 2 * Math.PI);
@@ -59,12 +59,8 @@ setInterval(function() {
 			drawList = []
 		}
 	}
-	if (drawList[0] == drawList[1] && drawList.length > 0){
-		console.log('wtf');
-	}
 	timer += 1;
 }, 0);
-
 
 
 onmousemove = function(e){
@@ -86,7 +82,6 @@ context.fillStyle = 'black';
 
 socket.on('drawnew', function(details,fillStyle) {
 	for (i=0; i<details.length; i++){
-		console.log(details[4]);
 		context.beginPath();
 		context.fillStyle = fillStyle
 		context.arc(details[i][0]-12, details[i][1]-10, details[i][5], 10, 0, 2 * Math.PI);
