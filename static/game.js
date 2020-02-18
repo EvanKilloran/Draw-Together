@@ -21,7 +21,7 @@ document.addEventListener('mouseup', function(event) {
 socket.emit('new player');
 setInterval(function() {
 	if (draw.active == true){
-		socket.emit('drawing', draw);
+		socket.emit('drawing', draw, color);
 	}
 }, 0);
 
@@ -36,10 +36,12 @@ var canvas = document.getElementById('canvas');
 canvas.width = 1900;
 canvas.height = 800;
 var context = canvas.getContext('2d');
+var color = 'black';
  
+context.fillStyle = 'black';
 context.clearRect(0, 0, 1900, 800);
-socket.on('drawnew', function(details) {
-    context.fillStyle = 'green';
+socket.on('drawnew', function(details,fillStyle) {
+	context.fillStyle = fillStyle
 	context.beginPath();
 	context.arc(details.x-12, details.y-10, 10, 0, 2 * Math.PI);
 	context.fill();
@@ -56,7 +58,13 @@ socket.on('remove', function(idremove) {
 });
 
 function boardReset(){
-	socket.emit('clear',1)
+	socket.emit('clear',1);
+    document.getElementById("button").disabled = true;
+	setTimeout(function(){document.getElementById("button").disabled = false;},10000);
+}
+
+function changeColor(colorpicker){
+	color = colorpicker;
 }
 
 function addRow(named) {
