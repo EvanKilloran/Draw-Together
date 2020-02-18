@@ -37,13 +37,13 @@ onmousemove = function(e){
 
 var canvas = document.getElementById('canvas');
 canvas.width = 1850;
-canvas.height = 800;
+canvas.height = 780;
 var context = canvas.getContext('2d');
 var color = 'black';
 var store;
  
 context.fillStyle = 'white';
-context.fillRect(0, 0, 1850, 800);
+context.fillRect(0, 0, 1850, 780);
 context.fillStyle = 'black';
 
 socket.on('drawnew', function(details,fillStyle) {
@@ -61,7 +61,7 @@ socket.on('clearrect', function() {
 	}
 	var store = context.fillStyle;
 	context.fillStyle = 'white'
-	context.fillRect(0, 0, 1850, 800);
+	context.fillRect(0, 0, 1850, 780);
 	context.fillStyle = store;
 });
 socket.on('insert', function(named) {
