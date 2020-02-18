@@ -6,8 +6,14 @@ var draw = {
   active: false,
   x: 0,
   y: 0,
+  prevx: 0,
+  prevy: 0
 }
 var download = false;
+var drawprev = false;
+var i;
+var angle;
+
 document.addEventListener('mousedown', function(event) {
 	draw.active = true;
 	draw.x  = event.pageX;
@@ -19,18 +25,31 @@ document.addEventListener('mouseup', function(event) {
 });
 
 socket.emit('new player');
+
 setInterval(function() {
 	if (draw.active == true){
 		socket.emit('drawing', draw, color);
 		context.beginPath();
 		context.arc(draw.x-12, draw.y-10, 10, 0, 2 * Math.PI);
 		context.fill();
+		if (drawprev == true){
+			context.beginPath();
+			context.lineWidth = 20;
+			context.moveTo(draw.x-12,draw.y-10);
+			context.lineTo(draw.prevx-12,draw.prevy-10);
+			context.stroke();
+		}
+		drawprev = true;
+		draw.prevx = draw.x;
+		draw.prevy = draw.y;
+	} else{
+		drawprev= false;
 	}
 }, 0);
 
 onmousemove = function(e){
 	if (e != undefined){
-		draw.x = e.clientX, 
+		draw.x = e.clientX,
 		draw.y = e.clientY
 	}
 }
@@ -41,7 +60,6 @@ canvas.height = 780;
 var context = canvas.getContext('2d');
 var color = 'black';
 var store;
- 
 context.fillStyle = 'white';
 context.fillRect(0, 0, 1850, 780);
 context.fillStyle = 'black';
