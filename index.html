@@ -14,12 +14,46 @@
 		padding-top: 0px;
 		margin-top: -40px;
 	  }
+		.colorpick {
+			  border: none;
+			  color: white;
+			  padding: 15px 32px;
+			  text-align: center;
+			  text-decoration: none;
+			  display: inline-block;
+			  font-size: 16px;
+		}
+	  #green{
+	  	 background-color: #4CAF50; /* Green */
+	  }
+	  #red{
+	  	 background-color: 	#FF0000; /* red */
+	  }
+	  #blue{
+	  	 background-color: #0000FF; /* blue */
+	  }
+	  #yellow{
+	  	 background-color: #ffff00; /* yellow */
+	  }
+	  #black{
+	  	 background-color: #000000; /* black */
+	  }
+	  #white{
+	  	 background-color: #FFC0CB; /* white */
+	  }
     </style>
     <script src="/socket.io/socket.io.js"></script>
   </head>
   <body>
     <canvas id="canvas"></canvas>
 	<button onclick="boardReset()" style="width:120px;height:60px;" id = "button">Reset Board</button>
+	<button class="colorpick" id="green" onclick="changeColor('green')">green</button>
+	<button class="colorpick" id="red" onclick="changeColor('red')">red</button>
+	<button class="colorpick" id="blue" onclick="changeColor('blue')">blue</button>
+	<button class="colorpick" id="yellow" onclick="changeColor('yellow')">yellow</button>
+	<button class="colorpick" id="black" onclick="changeColor('black')">black</button>
+	<button class="colorpick" id="white" onclick="changeColor('white')">white(erase)</button>
+	
 	</br>
 	<h1> Players </h1>
 	<div id="players">

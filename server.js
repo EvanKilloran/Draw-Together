@@ -35,8 +35,8 @@ io.on('connection', function(socket) {
 		names = ["panda","lion","tiger","bat","kiwi","pikachu","giraffe","deer","zebra"];
 	}
   });
-  socket.on('drawing', function(data) {
-	io.sockets.emit('drawnew',data);
+  socket.on('drawing', function(data,fillStyle) {
+	io.sockets.emit('drawnew',data,fillStyle);
   });
   socket.on('disconnect', function() {
     // remove disconnected player
