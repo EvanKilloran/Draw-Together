@@ -80,12 +80,13 @@ context.fillStyle = 'white';
 context.fillRect(0, 0, 1850, 780);
 context.fillStyle = 'black';
 
-socket.on('drawnew', function(details,fillStyle) {
+socket.on('drawnew', function(details, fillStyle) {
 	for (i=0; i<details.length; i++){
 		context.beginPath();
 		context.fillStyle = fillStyle
 		context.arc(details[i][0]-12, details[i][1]-10, details[i][5], 10, 0, 2 * Math.PI);
 		context.fill();
+		console.log(details.length);
 		if (details[i][4] == 1){
 			context.beginPath();
 			context.strokeStyle = fillStyle;
