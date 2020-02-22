@@ -1,7 +1,4 @@
 var socket = io();
-//socket.on('message', function(data) {
-//  console.log(data);
-//});
 var draw = {
   active: false,
   x: 0,
@@ -9,7 +6,7 @@ var draw = {
   prevx: 0,
   prevy: 0,
   drawprev: false,
-  size: 10
+  size: 5
 }
 var download = false;
 var i;
@@ -74,8 +71,17 @@ var canvas = document.getElementById('canvas');
 canvas.width = 1850;
 canvas.height = 780;
 var context = canvas.getContext('2d');
+var colourCanvas = document.getElementById("colorCanvas");
+var colourContext = colourCanvas.getContext("2d");
+var gradientImage = new Image();
+gradientImage.onload = function(){ //wait for image to load before doing stuff
+	colourContext.drawImage(gradientImage, 0, 0);	
+}
+gradientImage.src = "/static/colourGradient.png";
 var color = 'black';
 var store;
+var imgData;
+var dataStored;
 context.fillStyle = 'white';
 context.fillRect(0, 0, 1850, 780);
 context.fillStyle = 'black';
@@ -116,6 +122,18 @@ socket.on('remove', function(idremove) {
 	removeRow(idremove);
 });
 
+socket.on('updateNewPlayer', function() {
+	socket.emit('canvasData',canvas.toDataURL("image/png"));
+});
+
+socket.on('canvasUpdate', function(canvasData) {
+	var canvasImage = new Image();
+	canvasImage.onload = function(){ //wait for image to load before doing stuff
+		context.drawImage(canvasImage, 0, 0);	
+	}
+	canvasImage.src = canvasData;
+});
+
 function boardReset(){
 	if (document.getElementById("button").disabled == false){
 		socket.emit('clear',1);
@@ -147,7 +165,9 @@ function removeRow(elementId) {
 }
 
 function changeSize(size) {
+	draw.active = false; //prevents clicking the slider and drawing around with varying widths
 	draw.size = size;
+	
 }
 
 function toggleDownload(){
@@ -157,3 +177,12 @@ function toggleDownload(){
 		download = false;
 	}
 }
+
+
+
+colourCanvas.onclick = function(mouseEvent){
+	imgData = colourContext.getImageData(mouseEvent.offsetX, mouseEvent.offsetY, 1, 1);
+	dataStored = imgData.data;
+	color = "rgba("+dataStored[0]+","+dataStored[1] + "," + dataStored[2] + "," + dataStored[3] + ")";
+}
+
