@@ -20,10 +20,16 @@ io.on('connection', function(socket) {
 var names = ["panda","lion","tiger","bat","kiwi","pikachu","giraffe","deer","zebra"];
 var players = {};
 var i;
+var sendTo;
 io.on('connection', function(socket) {
   socket.on('new player', function() {
+	sendTo = socket.id;
 	for (i in players){
 		socket.emit('insert',players[i])
+	}
+	for (i in players){ //used as its hard to get length of dict
+		io.to(i).emit("updateNewPlayer");
+		//no break as sometimes when refresh button is spammed the player does not disconnect properly
 	}
 	while (names[0] == null){
 		names.shift();
@@ -46,6 +52,10 @@ io.on('connection', function(socket) {
   });
   socket.on('clear', function() {
 	io.sockets.emit('clearrect');
+  });
+	
+  socket.on('canvasData', function(canvasData) {
+	io.to(sendTo).emit("canvasUpdate", canvasData);
   });
 });
 

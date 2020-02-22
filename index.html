@@ -12,12 +12,9 @@
     <canvas id="canvas"></canvas><br/><br/>
 	<div id = "buttonsdiv">
 		<button onclick="boardReset()" style="width:120px;height:47px;" id = "button">Reset Board</button>
-		<button class="colorpick" id="green" onclick="changeColor('green')">green</button>
-		<button class="colorpick" id="red" onclick="changeColor('red')">red</button>
-		<button class="colorpick" id="blue" onclick="changeColor('blue')">blue</button>
-		<button class="colorpick" id="yellow" onclick="changeColor('yellow')">yellow</button>
-		<button class="colorpick" id="black" onclick="changeColor('black')">black</button>
-		<button class="colorpick" id="white" onclick="changeColor('white')">white(erase)</button>
+		<p style="display:inline;color:black;">Colour: </p>
+		<canvas id = "colorCanvas" width="595" height="40"> </canvas>
+		<button class="colorpick" id="white" onclick="changeColor('white')">Erase</button>
 		<label class="switch" style="float:right;">
 		  <input type="checkbox" onclick="toggleDownload()">
 		  <span class="slider round"></span>
@@ -25,15 +22,14 @@
 			<a id="link"></a>
 				<p class="colorpick" style="color:black;float:right;"> Download when cleared: </p>
 		<div class ="colorpick" id = "right">
-			<p style="display:inline;color:black;"> Brushes: </p>
-			<button class = "sizepick"  onclick="changeSize(5)">small</button>
-			<button class = "sizepick"  onclick="changeSize(10)">medium</button>
-			<button class = "sizepick"  onclick="changeSize(20)">large</button>
+			<p style="display:inline;color:black;">Size: </p>
+			<input type="range" min="1" max="20" value="5" id="sizeslider" oninput="sizedisplay.value = sizeslider.value;changeSize(sizedisplay.value)">
+			<output id = "sizedisplay">5</output>
 		</div>
 		</br>
 	</div>
-	<h1 class="higher"> Players </h1>
-	<div class="higher" id="players">
+		<h1> Players </h1>
+		<div id="players">
 	</div>
   </body>
   <script src="/static/game.js"></script>
