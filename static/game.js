@@ -29,6 +29,9 @@ socket.emit('new player');
 setInterval(function() {
 	if (draw.x > 0 && draw.x < (1850+30) && draw.y>0 && draw.y < (780+30) && draw.active == true){
 		if (draw.x != draw.prevx || draw.y != draw.prevy){
+			if (draw.size > 20){
+				draw.size = 20;
+			}
 			context.beginPath();
 			context.fillStyle = color;
 			context.arc(draw.x-12, draw.y-10, draw.size, 10, 0, 2 * Math.PI);
