@@ -20,9 +20,25 @@ document.addEventListener('mousedown', function(event) {
 	draw.y = event.pageY;
 });
 
+document.addEventListener('touchstart', function(event) {
+	draw.active = true;
+	draw.x  = e.originalEvent.touches[0].pageX;
+	draw.y  = e.originalEvent.touches[0].pageY;
+});
+document.addEventListener('touchmove', function(event) {
+	draw.active = true;
+	draw.x  = e.originalEvent.touches[0].pageX;
+	draw.y  = e.originalEvent.touches[0].pageY;
+});
+
 document.addEventListener('mouseup', function(event) {
 	draw.active = false;
 });
+
+document.addEventListener('touchcancel', function(event) {
+	draw.active = false;
+});
+
 
 socket.emit('new player');
 
