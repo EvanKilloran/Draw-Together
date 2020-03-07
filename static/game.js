@@ -30,8 +30,8 @@ document.addEventListener('touchmove', function(event) {
 	event.preventDefault();
 	boardReset();
 	draw.active = true;
-	draw.x  = e.originalEvent.touches[0].pageX;
-	draw.y  = e.originalEvent.touches[0].pageY;
+	draw.x  = e.originalEvent.touches[touches.length].pageX;
+	draw.y  = e.originalEvent.touches[touches.length].pageY;
 });
 
 document.addEventListener('mouseup', function(event) {
