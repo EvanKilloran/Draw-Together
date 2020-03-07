@@ -22,23 +22,21 @@ document.addEventListener('mousedown', function(event) {
 
 document.addEventListener('touchstart', function(event) {
 	draw.active = true;
-	draw.x  = e.originalEvent.touches[0].pageX;
-	draw.y  = e.originalEvent.touches[0].pageY;
+	draw.x  = event.changedTouches[0].pageX;
+	draw.y  = event.changedTouches[0].pageY;
 });
 
 document.addEventListener('touchmove', function(event) {
-	event.preventDefault();
-	boardReset();
 	draw.active = true;
-	draw.x  = e.originalEvent.touches[touches.length].pageX;
-	draw.y  = e.originalEvent.touches[touches.length].pageY;
+	draw.x  = event.changedTouches[0].pageX;
+	draw.y  = event.changedTouches[0].pageY;
 });
 
 document.addEventListener('mouseup', function(event) {
 	draw.active = false;
 });
 
-document.addEventListener('touchcancel', function(event) {
+document.addEventListener('touchend', function(event) {
 	draw.active = false;
 });
 
