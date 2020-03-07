@@ -13,6 +13,7 @@ var i;
 var angle;
 var drawList = [];
 var timer = 0;
+var test = 0;
 
 document.addEventListener('mousedown', function(event) {
 	draw.active = true;
@@ -25,10 +26,14 @@ document.addEventListener('touchstart', function(event) {
 	draw.x  = e.originalEvent.touches[0].pageX;
 	draw.y  = e.originalEvent.touches[0].pageY;
 });
+
 document.addEventListener('touchmove', function(event) {
 	draw.active = true;
-	draw.x  = e.originalEvent.touches[0].pageX;
-	draw.y  = e.originalEvent.touches[0].pageY;
+	draw.x  = e.originalEvent.touches[test].pageX;
+	draw.y  = e.originalEvent.touches[test].pageY;
+	test++;
+	
+socket.emit('new player');
 });
 
 document.addEventListener('mouseup', function(event) {
@@ -37,6 +42,7 @@ document.addEventListener('mouseup', function(event) {
 
 document.addEventListener('touchcancel', function(event) {
 	draw.active = false;
+	test = 0;
 });
 
 
