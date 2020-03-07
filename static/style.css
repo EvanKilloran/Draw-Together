@@ -2,6 +2,7 @@
 	width: 1850px;
 	height: 780px;
 	border: 5px solid black;
+	touch-action: none;
 }
 
 #buttonsdiv{
