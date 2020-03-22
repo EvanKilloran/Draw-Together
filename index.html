@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+	<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width">
+	<title>Draw Together</title>
+	<link href="/static/style.css" rel="stylesheet" type="text/css"/>
+	<script src="/socket.io/socket.io.js"></script>
+	</head>
+
+	<body>
+	<canvas id="canvas" touch-action="none"></canvas><br/><br/>
+
+	<div id = "buttonsdiv">
+		<button onclick="boardReset()" style="width:120px;height:47px;" id = "button">Reset Board</button>
+
+		<p style="display:inline;color:black;">Colour: </p>
+		<canvas id = "colorCanvas" width="623" height="40"> </canvas>
+		<button class="colorpick" id="eraser" onclick="changeColor('white')">Erase</button>
+		
+		<label class="switch" style="float:right;">
+			<input type="checkbox" onclick="toggleDownload()">
+			<span class="slider round"></span>
+		</label>
+		
+		<p class="colorpick" style="color:black;float:right;"> Download when cleared: </p>
+		<a id="link"></a>
+		
+		<div class ="colorpick" id = "right">
+			<p style="display:inline;color:black;">Size: </p>
+			<input type="range" min="1" max="20" value="5" id="sizeslider" oninput="sizedisplay.value = sizeslider.value;changeSize(sizedisplay.value)">
+			<output id = "sizedisplay">5</output>
+		</div>
+		
+		</br>
+	</div>
+	
+	<h1> Players </h1>
+	<div id="players">
+	</div>
+	
+	</body>
+	<script src="/static/game.js"></script>
+</html>
