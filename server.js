@@ -30,7 +30,7 @@ var sendTo;
 
 io.on('connection', function(socket) {
 	socket.on('new player', function() {
-		// variable to keep id for requesting canvas image (new player)
+		// var to keep id for requesting canvas image
 		sendTo = socket.id;
 		// Update new player's online div with everyone's name
 		for (i in players){
