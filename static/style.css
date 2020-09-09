@@ -21,10 +21,9 @@
 }
 
 #canvas {
-	width: 1850px;
-	height: 780px;
-	border: 5px solid black;
+
 	touch-action: none;
+	    border: 1px solid blue;
 }
 
 #buttonsdiv{

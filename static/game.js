@@ -18,13 +18,15 @@ var store;
 var imgData;
 var dataStored;
 
+
 var canvas = document.getElementById('canvas');
-canvas.width = 1850;
-canvas.height = 780;
+canvas.width = window.innerWidth-30;
+canvas.height = window.innerHeight-190;
 var context = canvas.getContext('2d');
 context.fillStyle = 'white';
 context.fillRect(0, 0, 1850, 780);
 context.fillStyle = 'black';
+
 
 var colourCanvas = document.getElementById("colorCanvas");
 var colourContext = colourCanvas.getContext("2d");
@@ -37,22 +39,41 @@ gradientImage.src = "/static/colourGradient.png";
 
 socket.emit('new player');
 
+window.onresize = function(event) {
+	var image = new Image();
+	image.src = canvas.toDataURL("image/png");
+	
+	canvas.width = window.innerWidth-30;
+	canvas.height = window.innerHeight-190;
+	
+	image.onload = function(){ //wait for image to load before doing stuff
+		context.drawImage(image, 0, 0, canvas.width, canvas.height);	
+	}
+	
+	
+};
+
 document.addEventListener('mousedown', function(event) {
 	draw.active = true;
-	draw.x  = event.pageX;
-	draw.y = event.pageY;
+	
+	
+	var rect = canvas.getBoundingClientRect(), scaleX = canvas.width/rect.width, scaleY = canvas.height / rect.height;
+	draw.x = (event.clientX - rect.left) * scaleX+10;
+	draw.y = (event.clientY - rect.top) * scaleY + 10;
 });
 
 document.addEventListener('touchstart', function(event) {
 	draw.active = true;
-	draw.x  = event.changedTouches[0].pageX;
-	draw.y  = event.changedTouches[0].pageY;
+	var rect = canvas.getBoundingClientRect(), scaleX = canvas.width/rect.width, scaleY = canvas.height / rect.height;
+	draw.x = (event.changedTouches[0].pageX - rect.left) * scaleX+10;
+	draw.y = (event.changedTouches[0].pageY - rect.top) * scaleY + 10;
 });
 
 document.addEventListener('touchmove', function(event) {
 	draw.active = true;
-	draw.x  = event.changedTouches[0].pageX;
-	draw.y  = event.changedTouches[0].pageY;
+	var rect = canvas.getBoundingClientRect(), scaleX = canvas.width/rect.width, scaleY = canvas.height / rect.height;
+	draw.x = (event.changedTouches[0].pageX - rect.left) * scaleX+10;
+	draw.y = (event.changedTouches[0].pageY - rect.top) * scaleY + 10;
 });
 
 document.addEventListener('mouseup', function(event) {
@@ -65,14 +86,15 @@ document.addEventListener('touchend', function(event) {
 
 onmousemove = function(e){
 	if (e != undefined){
-		draw.x = e.pageX,
-		draw.y = e.pageY
+		var rect = canvas.getBoundingClientRect(), scaleX = canvas.width/rect.width, scaleY = canvas.height / rect.height;
+		draw.x = (event.clientX - rect.left) * scaleX+10;
+		draw.y = (event.clientY - rect.top) * scaleY + 10;
 	}
 }
 
 setInterval(function() {
 	// This logic is making sure that it is within the bounds of the canvas AND that the cursor is in a new position (waste of memory to draw same place twice)
-	if (draw.x > 0 && draw.x < (1850+30) && draw.y>0 && draw.y < (780+30) && draw.active == true){
+	if (draw.x > 0 && draw.x < (window.innerWidth+30) && draw.y>0 && draw.y < (window.innerHeight+30) && draw.active == true){
 		if (draw.x != draw.prevx || draw.y != draw.prevy){
 			//prevent console editing values
 			if (draw.size > 20){
@@ -80,18 +102,19 @@ setInterval(function() {
 			}
 			context.beginPath();
 			context.fillStyle = color;
-			context.arc(draw.x-12, draw.y-10, draw.size, 10, 0, 2 * Math.PI);
+			context.arc(draw.x-12, draw.y-10, draw.size*Math.min((window.innerHeight-190)/780, (window.innerWidth-30)/1850), 10, 0, 2 * Math.PI);
 			context.fill();
 			//it draws circles and then draws rectangles in between each circle to make for a smoother appearence
 			if (draw.drawprev == true){
 				context.beginPath();
 				context.strokeStyle = color;
-				context.lineWidth = draw.size*2;
+				context.lineWidth = draw.size*2*Math.min(window.innerHeight/780, window.innerWidth/1850);
 				context.moveTo(draw.x-12,draw.y-10);
 				context.lineTo(draw.prevx-12,draw.prevy-10);
 				context.stroke();
 			}
-			drawList.push([draw.x,draw.y,draw.prevx,draw.prevy,draw.drawprev ? 1:0,draw.size]);
+			var rect = canvas.getBoundingClientRect(), scaleX = canvas.width/rect.width, scaleY = canvas.height / rect.height;
+			drawList.push([((draw.x-10)/scaleX + rect.left)/ canvas.width,((draw.y-10)/scaleY + rect.top)/canvas.height, ((draw.prevx-10)/scaleX + rect.left)/canvas.width, ((draw.prevy-10)/scaleY + rect.top)/canvas.height, draw.drawprev ? 1:0,draw.size]);
 			draw.drawprev = true;
 			draw.prevx = draw.x;
 			draw.prevy = draw.y;
@@ -165,15 +188,27 @@ function toggleDownload(){
 
 //same drawing logic as before but with requests from the server
 socket.on('drawnew', function(details, fillStyle) {
+	
 	for (i=0; i<details.length; i++){
 		context.beginPath();
 		context.fillStyle = fillStyle
-		context.arc(details[i][0]-12, details[i][1]-10, details[i][5], 10, 0, 2 * Math.PI);
+		
+		rect = canvas.getBoundingClientRect(), scaleX = canvas.width/rect.width, scaleY = canvas.height / rect.height;
+
+		details[i][0] *= canvas.width;
+		details[i][1] *= canvas.height;
+		details[i][2] *= canvas.width;
+		details[i][3] *= canvas.height;
+
+		
+
+
+		context.arc(details[i][0]-12, details[i][1]-10, details[i][5]*Math.min(window.innerHeight/780, window.innerWidth/1850), 10, 0, 2 * Math.PI);
 		context.fill();
 		if (details[i][4] == 1){
 			context.beginPath();
 			context.strokeStyle = fillStyle;
-			context.lineWidth = details[i][5]*2;
+			context.lineWidth = details[i][5]*2*Math.min(window.innerHeight/780, window.innerWidth/1850);
 			context.moveTo(details[i][0]-12,details[i][1]-10);
 			context.lineTo(details[i][2]-12,details[i][3]-10);
 			context.stroke();
@@ -193,7 +228,7 @@ socket.on('clearrect', function() {
 	//draw white square then return to previous selected colour
 	var store = context.fillStyle;
 	context.fillStyle = 'white'
-	context.fillRect(0, 0, 1850, 780);
+	context.fillRect(0, 0, 9999, 9999);
 	context.fillStyle = store;
 });
 
@@ -215,7 +250,7 @@ socket.on('updateNewPlayer', function() {
 socket.on('canvasUpdate', function(canvasData) {
 	var canvasImage = new Image();
 	canvasImage.onload = function(){ //wait for image to load before doing stuff
-		context.drawImage(canvasImage, 0, 0);	
+		context.drawImage(canvasImage, 0, 0, window.innerWidth+20, window.innerHeight-190);	
 	}
 	canvasImage.src = canvasData;
 });
